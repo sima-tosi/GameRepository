@@ -1,11 +1,12 @@
 #include "DxLib.h"
 #include "mouse.h"
 
-int cutCnt;
-int cutImage[9];
-bool mouseOld[MOUSE_MAX];
-bool mouseNew[MOUSE_MAX];
-bool mouseDown[MOUSE_MAX];
+int cutCnt;					// Ø‚éƒAƒjƒ
+int cutImage[9];			// ŽaŒ‚
+int cutMusic;				// Ø‚é‰¹
+bool mouseOld[MOUSE_MAX];	// Ì
+bool mouseNew[MOUSE_MAX];	// ¡
+bool mouseDown[MOUSE_MAX];	// ‰Ÿ‚³‚ê‚½H
 
 void MouseSysInit(void)
 {
@@ -16,7 +17,8 @@ void MouseSysInit(void)
 		mouseDown[mouseID] = false;
 	}
 	cutCnt = 0;
-	LoadDivGraph("image/ŽaŒ‚,png", 9, 9, 1, 120, 120, cutImage);
+	LoadDivGraph("image/ŽaŒ‚”’.png", 9, 9, 1, 120, 120, cutImage);
+	cutMusic = LoadSoundMem("music/click.mp3");
 }
 
 void MouseCheck(void)
@@ -44,11 +46,20 @@ void MouseCheck(void)
 void MousePos(int* x,int* y)
 {
 	GetMousePoint(x, y);
-
-	MouseDraw();
+	cutCnt = 0;
+	int t = CheckSoundMem(cutMusic);
+	int a = PlaySoundMem(cutMusic, DX_PLAYTYPE_BACK);
+	int t2 = CheckSoundMem(cutMusic);
 }
 
-void MouseDraw(void)
+void MouseDraw(int x,int y)
 {
-	DrawGraph(200, 200, cutImage[4], false);
+	if (x > 0 || y > 0)
+	{
+		if (cutCnt < 9)
+		{
+			DrawGraph(x - 60, y - 60, cutImage[cutCnt], true);
+		}
+		cutCnt++;
+	}
 }
