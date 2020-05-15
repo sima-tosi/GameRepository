@@ -2,10 +2,10 @@
 #include "effect.h"
 #include "main.h"
 
-int fadeCnt;
-int fade;
-bool fadeIn;
-bool fadeOut;
+int fadeCnt;	// フェードの濃さ
+int fade;		// フェードの色
+bool fadeIn;	// フェードインしてる？
+bool fadeOut;	// フェードアウトしてる？
 
 void FadeSysInit(void)
 {
