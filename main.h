@@ -11,9 +11,9 @@
 #define START_POS_Y	325
 #define RULE_POS_Y	450
 #define BACK_POS_Y	475
-#define A1_POS_Y	255
-#define A2_POS_Y	370
-#define A3_POS_Y	485
+#define A1_POS_Y	220
+#define A2_POS_Y	345
+#define A3_POS_Y	470
 
 
 // シーン管理
@@ -27,7 +27,7 @@ enum SCENE_ID
 	SCENE_MAX		
 };
 
-enum SIZE {
+enum SIZE_WOOD {
 	BIG,
 	SMALL,
 	SIZE_END
@@ -45,8 +45,10 @@ void SceneInit(void);
 void TitleScene(void);
 void TitleDraw(void);
 void GameScene(void);
-void GameDraw(void);
 void ResultScene(void);
 void ResultDraw(void);
 void RuleScene(void);
 void RuleDraw(void);
+
+extern int mouseX;			// マウスＸ座標
+extern int mouseY;			// マウスＹ座標

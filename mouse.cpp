@@ -17,7 +17,7 @@ void MouseSysInit(void)
 		mouseDown[mouseID] = false;
 	}
 	cutCnt = 0;
-	LoadDivGraph("image/ŽaŒ‚”’.png", 9, 9, 1, 120, 120, cutImage);
+	LoadDivGraph("image/ŽaŒ‚.png", 9, 9, 1, 240, 240, cutImage);
 	cutMusic = LoadSoundMem("music/click.mp3");
 }
 
@@ -58,7 +58,7 @@ void MouseDraw(int x,int y)
 	{
 		if (cutCnt < 9)
 		{
-			DrawGraph(x - 60, y - 60, cutImage[cutCnt], true);
+			DrawGraph(x - 120, y - 120, cutImage[cutCnt], true);
 		}
 		cutCnt++;
 	}
