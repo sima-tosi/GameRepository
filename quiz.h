@@ -1,7 +1,7 @@
 #pragma once
 
 void QuizSceneInit(void);
-int QuizSend(int level);
-void AnswerSend(int level);
-void Wrong1Send(int level);
-void Wrong2Send(int level);
+char* QuizSend(int level);
+char* AnswerSend(int level);
+char* Wrong1Send(int level);
+char* Wrong2Send(int level);

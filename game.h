@@ -1,8 +1,8 @@
 #pragma once
 
-#define TITLE_CHANGE    12
-#define QUESTION_CHANGE	30
-#define RESULT_CHANGE   30
+#define TITLE_CHANGE    120
+#define QUESTION_CHANGE	240
+#define RESULT_CHANGE   180
 
 enum GAME_SCENE {
 	GAME_T,

@@ -20,11 +20,12 @@ int soundNew;
 int soundOld;
 bool cutA[3];					// 切ってるか？
 bool check[3];					// 判定する？
-char quiz[3][10] = {"正解","不正解1","不正解2"};	// 選択肢
-int Q/*[20] = {"例題"}*/;			// 問題文
+char* quiz[3];		// 選択肢
+char* Q;			// 問題文
 
 int gameFont;		// ライフ・時間フォント
 int quizFont;		// 問題文・選択肢フォント
+int answerFont;
 
 int oMusic;			// 正解音
 int xMusic;			// 不正解音
@@ -52,8 +53,9 @@ void GameSysInit(void)
 	LoadDivGraph("image/3rd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[2]);
 
 	// 文字の設定
-	gameFont = CreateFontToHandle("GAME", 50, 3, -1);
-	quizFont = CreateFontToHandle("QUIZ", 60, 1, -1);
+	gameFont = CreateFontToHandle("GAME", 50, -1, -1);
+	quizFont = CreateFontToHandle("QUIZ", 20, -1, -1);
+	answerFont = CreateFontToHandle("ANSWER", 38, -1, -1);
 }
 void GameSceneInit(void)
 {
@@ -108,8 +110,10 @@ void GameTitle(void)
 		gamescene = GAME_Q;
 		changeTime = QUESTION_CHANGE;
 		Q = QuizSend(stage);
-		/*QWide = GetDrawFormatStringWidthToHandle(quizFont, Q);*/
-		QWide = GetDrawStringWidthToHandle("%d", Q, quizFont);
+		quiz[0] = AnswerSend(stage);
+		quiz[1] = Wrong1Send(stage);
+		quiz[2] = Wrong2Send(stage);
+		QWide = GetDrawFormatStringWidthToHandle(quizFont, Q);
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -140,14 +144,14 @@ void QuestionScene(void)
 		{
 			check[a] = false;
 			cutA[a] = false;
-			AWide[a] = GetDrawFormatStringWidthToHandle(quizFont, quiz[a]);
+			AWide[a] = GetDrawFormatStringWidthToHandle(answerFont, quiz[a]);
 		}
 	}
 }
 void QuestionDraw(void)
 {
 	DrawGraph(50, 25, woodImage[BIG], true);
-	DrawFormatStringToHandle((700 - QWide) / 2, 60, 0xffffff, quizFont, "%d", Q);
+	DrawFormatStringToHandle((700 - QWide) / 2, 83, 0xffffff, quizFont, "%s", Q);
 }
 
 void AnswerScene(void)
@@ -232,17 +236,17 @@ void AnswerDraw(void)
 	if (!cutA[0])
 	{ 
 		DrawGraph(SMALL_POS_X, A1_POS_Y, woodImage[SMALL], true);
-		DrawFormatStringToHandle((700 - AWide[A[0]]) / 2, A1_POS_Y + 20, 0xffffff, quizFont, "%s", quiz[A[0]]);
+		DrawFormatStringToHandle((700 - AWide[A[0]]) / 2, A1_POS_Y + 27, 0xffffff, answerFont, "%s", quiz[A[0]]);
 	}
 	if (!cutA[1])
 	{
 		DrawGraph(SMALL_POS_X, A2_POS_Y, woodImage[SMALL], true);
-		DrawFormatStringToHandle((700 - AWide[A[1]]) / 2, A2_POS_Y + 20, 0xffffff, quizFont, "%s", quiz[A[1]]);
+		DrawFormatStringToHandle((700 - AWide[A[1]]) / 2, A2_POS_Y + 27, 0xffffff, answerFont, "%s", quiz[A[1]]);
 	}
 	if (!cutA[2])
 	{
 		DrawGraph(SMALL_POS_X, A3_POS_Y, woodImage[SMALL], true);
-		DrawFormatStringToHandle((700 - AWide[A[2]]) / 2, A3_POS_Y + 20, 0xffffff, quizFont, "%s", quiz[A[2]]);
+		DrawFormatStringToHandle((700 - AWide[A[2]]) / 2, A3_POS_Y + 27, 0xffffff, answerFont, "%s", quiz[A[2]]);
 	}
 }
 
@@ -277,17 +281,17 @@ void GameResultDraw(void)
 	if (A[0] == 0)
 	{
 		DrawGraph(SMALL_POS_X, A1_POS_Y, woodImage[SMALL], true);
-		DrawFormatStringToHandle((700 - AWide[A[0]]) / 2, A1_POS_Y+20, 0xffffff, quizFont, "%s", quiz[A[0]]);
+		DrawFormatStringToHandle((700 - AWide[A[0]]) / 2, A1_POS_Y+27, 0xffffff, answerFont, "%s", quiz[A[0]]);
 	}
 	else if (A[1] == 0)
 	{
 		DrawGraph(SMALL_POS_X, A2_POS_Y, woodImage[SMALL], true);
-		DrawFormatStringToHandle((700 - AWide[A[1]]) / 2, A2_POS_Y+20, 0xffffff, quizFont, "%s", quiz[A[1]]);
+		DrawFormatStringToHandle((700 - AWide[A[1]]) / 2, A2_POS_Y+27, 0xffffff, answerFont, "%s", quiz[A[1]]);
 	}
 	else if (A[2] == 0)
 	{
 		DrawGraph(SMALL_POS_X, A3_POS_Y, woodImage[SMALL], true);
-		DrawFormatStringToHandle((700 - AWide[A[2]]) / 2, A3_POS_Y+20, 0xffffff, quizFont, "%s", quiz[A[2]]);
+		DrawFormatStringToHandle((700 - AWide[A[2]]) / 2, A3_POS_Y+27, 0xffffff, answerFont, "%s", quiz[A[2]]);
 	}
 }
 

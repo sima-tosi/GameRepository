@@ -1,14 +1,15 @@
 #include "DxLib.h"
 #include "quiz.h"
+#include "QandA.h"
 
-int quizjyun[70];
-int quizNo[70];
+int quizjyun[Qcnt];
+int quizNo[Qcnt];
 int quizsuu;
 
 void QuizSceneInit(void)
 {
-	quizsuu = 0;
-	for (int a = 0; a < 70; a++)
+	quizsuu = -1;
+	for (int a = 0; a < Qcnt; a++)
 	{
 		quizjyun[a] = GetRand(1000);
 		quizNo[a] = a;
@@ -16,7 +17,7 @@ void QuizSceneInit(void)
 
 	int c;	// ‘Ò‹@êŠ
 
-	for (int a = 70 - 1; a > 1; a--)
+	for (int a = Qcnt - 1; a > 1; a--)
 	{
 		for (int b = 0; b < a; b++)
 		{
@@ -34,21 +35,52 @@ void QuizSceneInit(void)
 	
 }
 
-int QuizSend(int level)
+char* QuizSend(int level)
 {
-	// [level][quizNo]
 	quizsuu++;
-	return quizNo[quizsuu-1];
+	switch (level)
+	{
+	case 0:
+		return easy[quizNo[quizsuu-1]][0];
+	case 1:
+		return normal[quizNo[quizsuu-1]][0];
+	case 2:
+		return hard[quizNo[quizsuu-1]][0];
+	}
 }
-void AnswerSend(int level)
+char* AnswerSend(int level)
 {
-	// [level][quizNo]
+	switch (level)
+	{
+	case 0:
+		return easy[quizNo[quizsuu - 1]][1];
+	case 1:
+		return normal[quizNo[quizsuu - 1]][1];
+	case 2:
+		return hard[quizNo[quizsuu - 1]][1];
+	}
 }
-void Wrong1Send(int level)
+char* Wrong1Send(int level)
 {
-	// [level][quizNo]
+	switch (level)
+	{
+	case 0:
+		return easy[quizNo[quizsuu - 1]][2];
+	case 1:
+		return normal[quizNo[quizsuu - 1]][2];
+	case 2:
+		return hard[quizNo[quizsuu - 1]][2];
+	}
 }
-void Wrong2Send(int level)
+char* Wrong2Send(int level)
 {
-	// [level][quizNo]
+	switch (level)
+	{
+	case 0:
+		return easy[quizNo[quizsuu - 1]][3];
+	case 1:
+		return normal[quizNo[quizsuu - 1]][3];
+	case 2:
+		return hard[quizNo[quizsuu - 1]][3];
+	}
 }
