@@ -26,6 +26,7 @@ char* Q;			// 問題文
 int gameFont;		// ライフ・時間フォント
 int quizFont;		// 問題文・選択肢フォント
 int answerFont;
+bool fadeinOld;
 
 int oMusic;			// 正解音
 int xMusic;			// 不正解音
@@ -63,7 +64,8 @@ void GameSceneInit(void)
 	time = 1200;
 	life = 3;
 	stage = 0;
-	gamescene = GAME_T;
+	fadeinOld = true;
+	gamescene = GAME_C;
 	changeTime = TITLE_CHANGE;
 }
 
@@ -72,32 +74,33 @@ int GameMain(void)
 	int c = 0;
 
 	cnt++;
-	DrawGraph(0, 0, backImage[0][cnt / 5 % 2], true);
+	DrawGraph(0, 0, backImage[stage][cnt / 5 % 2], true);
 	DrawGraph(615, 480, lifeImage, true);
 	DrawFormatStringToHandle(637, 528, 0x000000, gameFont, "%d", life);
 
-	if (!fadeIn && !fadeOut)
+	switch (gamescene)
 	{
-		switch (gamescene)
-		{
-		case GAME_T:
-			GameTitle();
-			break;
-		case GAME_Q:
-			QuestionScene();
-			break;
-		case GAME_A:
-			AnswerScene();
-			break;
-		case GAME_R:
-			c = GameResult();
-			break;
-		case GAME_E:
-			break;
-		default:
-			break;
-		}
+	case GAME_T:
+		GameTitle();
+		break;
+	case GAME_Q:
+		QuestionScene();
+		break;
+	case GAME_A:
+		AnswerScene();
+		break;
+	case GAME_R:
+		c = GameResult();
+		break;
+	case GAME_C:
+		GameContnue();
+		break;
+	default:
+		break;
 	}
+
+
+	fadeinOld = fadeIn;
 
 	return c;
 }
@@ -255,8 +258,7 @@ int GameResult(void)
 	changeTime--;
 	if (changeTime <= 0)
 	{
-		gamescene = GAME_T;
-		changeTime = TITLE_CHANGE;
+		gamescene = GAME_C;
 
 		if (life <= 0)
 		{
@@ -265,7 +267,6 @@ int GameResult(void)
 		if (oCnt == 4)
 		{
 			oCnt = 0;
-			stage++;
 			return 1;
 		}
 	}
@@ -292,6 +293,27 @@ void GameResultDraw(void)
 	{
 		DrawGraph(SMALL_POS_X, A3_POS_Y, woodImage[SMALL], true);
 		DrawFormatStringToHandle((700 - AWide[A[2]]) / 2, A3_POS_Y+27, 0xffffff, answerFont, "%s", quiz[A[2]]);
+	}
+}
+
+void GameContnue(void)
+{
+	if (fadeOut)
+	{
+		return;
+	}
+	else if (fadeIn)
+	{
+		if (!fadeinOld)
+		{
+			stage++;
+		}
+		return;
+	}
+	else
+	{
+		gamescene = GAME_T;
+		changeTime = TITLE_CHANGE;
 	}
 }
 

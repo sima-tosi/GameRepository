@@ -41,11 +41,11 @@ char* QuizSend(int level)
 	switch (level)
 	{
 	case 0:
-		return easy[quizNo[quizsuu-1]][0];
+		return easy[quizNo[quizsuu]][0];
 	case 1:
-		return normal[quizNo[quizsuu-1]][0];
+		return normal[quizNo[quizsuu]][0];
 	case 2:
-		return hard[quizNo[quizsuu-1]][0];
+		return hard[quizNo[quizsuu]][0];
 	}
 }
 char* AnswerSend(int level)
@@ -53,11 +53,11 @@ char* AnswerSend(int level)
 	switch (level)
 	{
 	case 0:
-		return easy[quizNo[quizsuu - 1]][1];
+		return easy[quizNo[quizsuu]][1];
 	case 1:
-		return normal[quizNo[quizsuu - 1]][1];
+		return normal[quizNo[quizsuu]][1];
 	case 2:
-		return hard[quizNo[quizsuu - 1]][1];
+		return hard[quizNo[quizsuu]][1];
 	}
 }
 char* Wrong1Send(int level)
@@ -65,11 +65,11 @@ char* Wrong1Send(int level)
 	switch (level)
 	{
 	case 0:
-		return easy[quizNo[quizsuu - 1]][2];
+		return easy[quizNo[quizsuu]][2];
 	case 1:
-		return normal[quizNo[quizsuu - 1]][2];
+		return normal[quizNo[quizsuu]][2];
 	case 2:
-		return hard[quizNo[quizsuu - 1]][2];
+		return hard[quizNo[quizsuu]][2];
 	}
 }
 char* Wrong2Send(int level)
@@ -77,10 +77,10 @@ char* Wrong2Send(int level)
 	switch (level)
 	{
 	case 0:
-		return easy[quizNo[quizsuu - 1]][3];
+		return easy[quizNo[quizsuu]][3];
 	case 1:
-		return normal[quizNo[quizsuu - 1]][3];
+		return normal[quizNo[quizsuu]][3];
 	case 2:
-		return hard[quizNo[quizsuu - 1]][3];
+		return hard[quizNo[quizsuu]][3];
 	}
 }

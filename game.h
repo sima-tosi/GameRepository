@@ -9,7 +9,7 @@ enum GAME_SCENE {
 	GAME_Q,
 	GAME_A,
 	GAME_R,
-	GAME_E,
+	GAME_C,
 	GAME_MAX
 };
 
@@ -25,3 +25,4 @@ int GameResult(void);
 void GameResultDraw(void);
 int Score1(void);
 int Score2(void);
+void GameContnue(void);
