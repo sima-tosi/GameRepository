@@ -1,10 +1,13 @@
 #pragma once
 
-#define TITLE_CHANGE    120
-#define QUESTION_CHANGE	240
-#define RESULT_CHANGE   180
+#define START_CHANGE	180		// 背景のみの時間
+#define TITLE_CHANGE    150		// 「問題」を時間
+#define QUESTION_CHANGE	240		// 問題文を読む時間
+#define RESULT_CHANGE   120		// 正解発表時間
 
+// ゲームのシーン管理
 enum GAME_SCENE {
+	GAME_S,
 	GAME_T,
 	GAME_Q,
 	GAME_A,
@@ -15,6 +18,7 @@ enum GAME_SCENE {
 
 void GameSysInit(void);
 void GameSceneInit(void);
+void GameStart(void);
 void GameTitle(void);
 int GameMain(void);
 void QuestionScene(void);

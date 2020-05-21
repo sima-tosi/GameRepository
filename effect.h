@@ -15,6 +15,6 @@ bool FadeOutB(void);
 bool FadeOutW(void);
 void FadeDraw(void);
 
-extern int fade;
-extern bool fadeIn;
-extern bool fadeOut;
+extern int fade;		// フェードの色
+extern bool fadeIn;		// フェードインしてる？
+extern bool fadeOut;	// フェイドアウトしてる？

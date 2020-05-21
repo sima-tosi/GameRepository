@@ -11,7 +11,7 @@ enum MOUSE_KEY
 void MouseSysInit(void);
 void MouseCheck(void);
 void MousePos(int* x,int* y);
-void MouseDraw(int x, int y);
+bool MouseDraw(int x, int y);
 
 // •Ï”
 extern bool mouseOld[MOUSE_MAX];

@@ -5,36 +5,38 @@
 #include "effect.h"
 #include "quiz.h"
 
-int gamescene;
+int gamescene;		
 
-int cnt;						// 背景用カウント
-int oCnt;						// 正解数
-int stage;						// ステージ数
-int life;						// 残機
-int time;						// 制限時間
-int changeTime;					// シーンの変更をする時間
-int A[3];						// 選択番号
-int QWide;
-int AWide[3];
-int soundNew;
-int soundOld;
-bool cutA[3];					// 切ってるか？
-bool check[3];					// 判定する？
-char* quiz[3];		// 選択肢
+int okCnt;			// 切った枚数
+int cnt;			// 背景用カウント
+int oCnt;			// 正解数
+int stage;			// ステージ数
+int life;			// 残機
+int time;			// 制限時間
+int changeTime;		// シーンの変更をする時間
+int A[3];			// 選択番号
+int QWide;			// 問題文の幅
+int AWide[3];		// 答えの幅
+bool fadeinOld;		// フェードインしてる（昔）？
+bool cutOkOld;		// 切ってもいいか（昔）？
+bool cutA[3];		// 画面に映す？
+bool check[3];		// クリックした？
+char* quiz[3];		// 選択肢[正解、不正解、不正解]
 char* Q;			// 問題文
 
 int gameFont;		// ライフ・時間フォント
-int quizFont;		// 問題文・選択肢フォント
-int answerFont;
-bool fadeinOld;
+int quizFont;		// 問題文フォント
+int answerFont;		// 選択肢フォント
 
 int oMusic;			// 正解音
 int xMusic;			// 不正解音
+int quizMusic;		// 始まり音
+int answerMusic;	// 選択開始音
 
-int lifeImage;		// 残機の絵
-int timeImage;		// 時間の絵
-int toiImage;		// 問題
-int backImage[3][2];// 背景[ステージ][アニメーション]
+int lifeImage;				// 残機の絵
+int timeImage;				// 時間の絵
+int toiImage;				// 問題
+int backImage[3][2];		// 背景[ステージ][アニメーション]
 int woodImage[SIZE_END];	// 板[大・小]
 
 void GameSysInit(void)
@@ -42,6 +44,8 @@ void GameSysInit(void)
 	// 音楽
 	oMusic = LoadSoundMem("music/O.mp3");
 	xMusic = LoadSoundMem("music/X.mp3");
+	quizMusic = LoadSoundMem("music/quiz.mp3");
+	answerMusic = LoadSoundMem("music/answer.mp3");
 
 	// イラストの初期化
 	woodImage[0] = LoadGraph("image/問題.png");
@@ -65,8 +69,9 @@ void GameSceneInit(void)
 	life = 3;
 	stage = 0;
 	fadeinOld = true;
-	gamescene = GAME_C;
-	changeTime = TITLE_CHANGE;
+	cutOkOld = true;
+	gamescene = GAME_S;
+	changeTime = START_CHANGE;
 }
 
 int GameMain(void)
@@ -80,6 +85,9 @@ int GameMain(void)
 
 	switch (gamescene)
 	{
+	case GAME_S:
+		GameStart();
+		break;
 	case GAME_T:
 		GameTitle();
 		break;
@@ -105,6 +113,16 @@ int GameMain(void)
 	return c;
 }
 
+void GameStart(void)
+{
+	changeTime--;
+	if (changeTime <= 0)
+	{
+		gamescene = GAME_T;
+		PlaySoundMem(quizMusic, DX_PLAYTYPE_BACK);
+		changeTime = TITLE_CHANGE;
+	}
+}
 void GameTitle(void)
 {
 	changeTime--;
@@ -149,6 +167,8 @@ void QuestionScene(void)
 			cutA[a] = false;
 			AWide[a] = GetDrawFormatStringWidthToHandle(answerFont, quiz[a]);
 		}
+		okCnt = 0;
+		PlaySoundMem(answerMusic, DX_PLAYTYPE_BACK);
 	}
 }
 void QuestionDraw(void)
@@ -159,9 +179,6 @@ void QuestionDraw(void)
 
 void AnswerScene(void)
 {
-	soundOld = soundNew;
-	soundNew = CheckSoundMem(cutMusic);
-
 	if (mouseDown[MOUSE_LEFT])
 	{
 		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
@@ -180,7 +197,7 @@ void AnswerScene(void)
 			check[2] = true;
 		}
 	}
-	if (soundNew == 0 && soundOld == 1)
+	if (cutOk && !cutOkOld)
 	{
 		bool O = false;
 		int okCut = 0;
@@ -202,15 +219,15 @@ void AnswerScene(void)
 			life--;
 			gamescene = GAME_R;
 		}
-		else if (okCut == 2)
+		else if (okCut != okCnt)
 		{
 			PlaySoundMem(oMusic, DX_PLAYTYPE_BACK);
-			oCnt++;
-			gamescene = GAME_R;
-		}
-		else
-		{
-			PlaySoundMem(oMusic, DX_PLAYTYPE_BACK);
+			okCnt++;
+			if (okCut == 2)
+			{
+				oCnt++;
+				gamescene = GAME_R;
+			}
 		}
 	}
 
@@ -227,7 +244,10 @@ void AnswerScene(void)
 	//	fade = FADE_WHITE;
 	//  stage++;
 	//}
+
 	AnswerDraw();
+
+	cutOkOld = cutOk;
 }
 void AnswerDraw(void)
 {
@@ -304,19 +324,23 @@ void GameContnue(void)
 	}
 	else if (fadeIn)
 	{
-		if (!fadeinOld)
+		if (!fadeinOld && fade == FADE_WHITE)
 		{
 			stage++;
+			gamescene = GAME_S; 
+			changeTime = START_CHANGE;
 		}
 		return;
 	}
 	else
 	{
 		gamescene = GAME_T;
+		PlaySoundMem(quizMusic, DX_PLAYTYPE_BACK);
 		changeTime = TITLE_CHANGE;
 	}
 }
 
+// ～忍
 int Score2(void)
 {
 	int O = stage * 4 + oCnt;
@@ -333,6 +357,7 @@ int Score2(void)
 		return 2;
 	}
 }
+// ～ランク
 int Score1(void)
 {
 	int O = stage * 4 + oCnt;

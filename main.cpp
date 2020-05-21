@@ -8,22 +8,26 @@
 SCENE_ID sceneID;
 SCENE_ID sceneIDOld;
 
-int mouseX;			// マウスＸ座標
-int mouseY;			// マウスＹ座標
-int fadeWCnt;
-int rank1;
-int rank2;
-bool clear;
+int mouseX;		// マウスＸ座標
+int mouseY;		// マウスＹ座標
+int fadeWCnt;	// 白フェードの回数
+int rank1;		// ～ランク
+int rank2;		// ～忍
+int rulePage;	// 遊び方説明のページ数
+bool clear;		// ゲームクリア？
+bool cutOk;		// 切ってもいいか
 
 int titleImage;		// タイトル
 int startWImage;	// スタートの板
 int ruleWImage;		// 遊び方説明の板
 int backWImage;		// 戻るの板
-int ruleImage;		// 遊び方説明
+int nextWImage;		// 次への板
+int ruleImage[3];	// 遊び方説明
+int ayamaruImage;	// タイトル裏の彪丸
 int resultImage[2];	// リザルト[クリア・オーバー]
 int rankImage1[5];	// ランク[S・A・B・C・D]
 int rankImage2[3];	// ランク[上・中・下]
-int EDImage[2];		//
+int EDImage[2];		// ＥＤの彪丸
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -44,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (fadeIn)FadeIn();
 
-		if (mouseDown[MOUSE_LEFT])
+		if (mouseDown[MOUSE_LEFT] && cutOk)
 		{
 			MousePos(&mouseX, &mouseY);
 		}
@@ -64,6 +68,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						sceneID = SCENE_GAME;
 						PlaySoundFile("music/game.mp3", DX_PLAYTYPE_LOOP);
 
+					}
+				}
+				if (fade == FADE_WHITE)
+				{
+					if (FadeOutW())
+					{
+						sceneID = SCENE_RULE;
 					}
 				}
 			}
@@ -106,13 +117,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			ResultScene();
 			break;
 		case SCENE_RULE:
+			if (fadeOut)
+			{
+				if (fade == FADE_WHITE)
+				{
+					if (FadeOutW())
+					{
+						sceneID = SCENE_TITLE;
+					}
+				}
+			}
 			RuleScene();
 			break;
 		default:
 			break;
 		}
 
-		MouseDraw(mouseX, mouseY);
+		cutOk = MouseDraw(mouseX, mouseY);
 
 		FadeDraw();
 
@@ -134,25 +155,18 @@ bool SystemInit(void)	// 初期設定
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
 
-
 	// イラスト初期設定
 	titleImage = LoadGraph("image/タイトル.png");
 	startWImage = LoadGraph("image/START.png");
 	ruleWImage = LoadGraph("image/遊び方説明.png");
 	backWImage = LoadGraph("image/戻る.png");
-	ruleImage = LoadGraph("image/説明.png");
-	resultImage[0] = LoadGraph("image/GAMEOVER.png");
-	resultImage[1] = LoadGraph("image/GAMECLEAR.png");
-	rankImage1[0] = LoadGraph("image/Sランク.png");
-	rankImage1[1] = LoadGraph("image/Aランク.png");
-	rankImage1[2] = LoadGraph("image/Bランク.png");
-	rankImage1[3] = LoadGraph("image/Cランク.png");
-	rankImage1[4] = LoadGraph("image/Dランク.png");
-	rankImage2[0] = LoadGraph("image/上忍.png");
-	rankImage2[1] = LoadGraph("image/中忍.png");
-	rankImage2[2] = LoadGraph("image/下忍.png");
-	EDImage[0] = LoadGraph("image/彪丸ED1.png");
-	EDImage[1] = LoadGraph("image/彪丸ED2.png");
+	nextWImage = LoadGraph("image/次へ.png");
+	LoadDivGraph("image/説明.png", 3, 2, 2, 700, 450, ruleImage);;
+	ayamaruImage = LoadGraph("image/彪丸OP.png");
+	LoadDivGraph("image/GAME.jpg", 2, 1, 2, 500, 125, resultImage);
+	LoadDivGraph("image/ランク.jpg", 5, 1, 5, 200, 64, rankImage1);
+	LoadDivGraph("image/忍.jpg", 3, 1, 3, 200, 64, rankImage2);
+	LoadDivGraph("image/ED彪丸.png", 2, 2, 1, 200, 225, EDImage);
 
 	// 変数初期設定
 	sceneID = SCENE_INIT;
@@ -189,7 +203,10 @@ void TitleScene(void)
 		RULE_POS_Y < mouseY && RULE_POS_Y + WOOD_SMALL_Y > mouseY &&
 		mouseDown[MOUSE_LEFT])
 	{
-		sceneID = SCENE_RULE;
+		fadeOut = true;
+		fadeIn = false;
+		fade = FADE_WHITE;
+		rulePage = 0;
 	}
 
 	TitleDraw();
@@ -197,7 +214,7 @@ void TitleScene(void)
 void TitleDraw(void)
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
-	// 彪丸
+	DrawGraph(0, 0, ayamaruImage, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	DrawGraph(100, 50, titleImage, true);
@@ -261,13 +278,34 @@ void RuleScene(void)
 		BACK_POS_Y < mouseY && BACK_POS_Y + WOOD_SMALL_Y > mouseY &&
 		mouseDown[MOUSE_LEFT])
 	{
-		sceneID = SCENE_TITLE;
+		rulePage++;
+	}
+	if (rulePage == 3 && mouseDown[MOUSE_LEFT])
+	{
+		fadeOut = true;
+		fadeIn = false;
+		fade = FADE_WHITE;
 	}
 
 	RuleDraw();
 }
 void RuleDraw(void)
 {
-	DrawGraph(0, 0, ruleImage, true);
-	DrawGraph(SMALL_POS_X, BACK_POS_Y, backWImage, true);
+	if (rulePage < 3)
+	{
+		DrawGraph(0, 0, ruleImage[rulePage], true);
+	}
+	else
+	{
+		DrawGraph(0, 0, ruleImage[2], true);
+	}
+	
+	if (rulePage >= 2)
+	{
+		DrawGraph(SMALL_POS_X, BACK_POS_Y, backWImage, true);
+	}
+	else
+	{
+		DrawGraph(SMALL_POS_X, BACK_POS_Y, nextWImage, true);
+	}
 }

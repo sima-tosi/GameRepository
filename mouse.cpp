@@ -47,19 +47,19 @@ void MousePos(int* x,int* y)
 {
 	GetMousePoint(x, y);
 	cutCnt = 0;
-	int t = CheckSoundMem(cutMusic);
-	int a = PlaySoundMem(cutMusic, DX_PLAYTYPE_BACK);
-	int t2 = CheckSoundMem(cutMusic);
+	PlaySoundMem(cutMusic, DX_PLAYTYPE_BACK);
 }
 
-void MouseDraw(int x,int y)
+bool MouseDraw(int x,int y)
 {
 	if (x > 0 || y > 0)
 	{
-		if (cutCnt < 9)
+		if (cutCnt < 27)
 		{
-			DrawGraph(x - 120, y - 120, cutImage[cutCnt], true);
+			DrawGraph(x - 120, y - 120, cutImage[cutCnt / 2], true);
+			cutCnt++;
+			return false;
 		}
-		cutCnt++;
 	}
+	return true;
 }

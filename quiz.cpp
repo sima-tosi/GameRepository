@@ -2,9 +2,9 @@
 #include "quiz.h"
 #include "QandA.h"
 
-int quizjyun[Qcnt];
-int quizNo[Qcnt];
-int quizsuu;
+int quizjyun[Qcnt];		// クイズの順番（バブルで使う）
+int quizNo[Qcnt];		// クイズ番号
+int quizsuu;			// 今の問題数
 
 void QuizSceneInit(void)
 {
