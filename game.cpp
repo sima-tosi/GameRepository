@@ -48,12 +48,12 @@ void GameSysInit(void)
 	answerMusic = LoadSoundMem("music/answer.mp3");
 
 	// イラストの初期化
-	woodImage[0] = LoadGraph("image/問題.png");
-	woodImage[1] = LoadGraph("image/選択肢.png");
-	lifeImage = LoadGraph("image/life.png");
-	timeImage = LoadGraph("image/time.png");
-	toiImage = LoadGraph("image/問.png");
-	LoadDivGraph("image/1st.png", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[0]);
+	woodImage[0] = LoadGraph("image/問題.jpg");
+	woodImage[1] = LoadGraph("image/選択肢.jpg");
+	lifeImage = LoadGraph("image/life.jpg");
+	timeImage = LoadGraph("image/time.jpg");
+	toiImage = LoadGraph("image/問.jpg");
+	LoadDivGraph("image/1st_.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[0]);
 	LoadDivGraph("image/2nd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[1]);
 	LoadDivGraph("image/3rd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[2]);
 
@@ -179,6 +179,8 @@ void QuestionDraw(void)
 
 void AnswerScene(void)
 {
+	AnswerDraw();
+
 	if (mouseDown[MOUSE_LEFT])
 	{
 		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
@@ -218,6 +220,7 @@ void AnswerScene(void)
 			PlaySoundMem(xMusic, DX_PLAYTYPE_BACK);
 			life--;
 			gamescene = GAME_R;
+			return;
 		}
 		else if (okCut != okCnt)
 		{
@@ -227,6 +230,7 @@ void AnswerScene(void)
 			{
 				oCnt++;
 				gamescene = GAME_R;
+				return;
 			}
 		}
 	}
@@ -234,18 +238,18 @@ void AnswerScene(void)
 	time--;
 	if (time <= 0)
 	{
+		for (int a = 0; a < 3; a++)
+		{
+			if (check[a] != cutA[a])
+			{
+				return;
+			}
+		}
 		PlaySoundMem(xMusic, DX_PLAYTYPE_BACK);
 		life--;
 		gamescene = GAME_R;
+		return;
 	}
-	//if (oCnt % 4 == 0)
-	//{
-	//	fadeOut = true;
-	//	fade = FADE_WHITE;
-	//  stage++;
-	//}
-
-	AnswerDraw();
 
 	cutOkOld = cutOk;
 }
@@ -284,7 +288,7 @@ int GameResult(void)
 		{
 			return -1;
 		}
-		if (oCnt == 4)
+		if (oCnt == 1)
 		{
 			oCnt = 0;
 			return 1;

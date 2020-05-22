@@ -4,6 +4,7 @@
 #include "mouse.h"
 #include "effect.h"
 #include "quiz.h"
+#include "time.h"
 
 SCENE_ID sceneID;
 SCENE_ID sceneIDOld;
@@ -154,19 +155,22 @@ bool SystemInit(void)	// 初期設定
 		return false;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
+	SRand(time(NULL));
+
+	SetTransColor(0, 0, 0);
 
 	// イラスト初期設定
-	titleImage = LoadGraph("image/タイトル.png");
-	startWImage = LoadGraph("image/START.png");
-	ruleWImage = LoadGraph("image/遊び方説明.png");
-	backWImage = LoadGraph("image/戻る.png");
-	nextWImage = LoadGraph("image/次へ.png");
+	titleImage = LoadGraph("image/タイトル.jpg");
+	startWImage = LoadGraph("image/START.jpg");
+	ruleWImage = LoadGraph("image/遊び方説明.jpg");
+	backWImage = LoadGraph("image/戻る.jpg");
+	nextWImage = LoadGraph("image/次へ.jpg");
 	LoadDivGraph("image/説明.png", 3, 2, 2, 700, 450, ruleImage);;
-	ayamaruImage = LoadGraph("image/彪丸OP.png");
+	ayamaruImage = LoadGraph("image/彪丸OP.jpg");
 	LoadDivGraph("image/GAME.jpg", 2, 1, 2, 500, 125, resultImage);
 	LoadDivGraph("image/ランク.jpg", 5, 1, 5, 200, 64, rankImage1);
 	LoadDivGraph("image/忍.jpg", 3, 1, 3, 200, 64, rankImage2);
-	LoadDivGraph("image/ED彪丸.png", 2, 2, 1, 200, 225, EDImage);
+	LoadDivGraph("image/ED彪丸.jpg", 2, 2, 1, 200, 225, EDImage);
 
 	// 変数初期設定
 	sceneID = SCENE_INIT;
@@ -213,7 +217,7 @@ void TitleScene(void)
 }
 void TitleDraw(void)
 {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
 	DrawGraph(0, 0, ayamaruImage, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -276,7 +280,7 @@ void RuleScene(void)
 {
 	if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 		BACK_POS_Y < mouseY && BACK_POS_Y + WOOD_SMALL_Y > mouseY &&
-		mouseDown[MOUSE_LEFT])
+		mouseDown[MOUSE_LEFT] && cutOk)
 	{
 		rulePage++;
 	}
