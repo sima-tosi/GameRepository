@@ -38,6 +38,7 @@ int timeImage;				// 時間の絵
 int toiImage;				// 問題
 int backImage[3][2];		// 背景[ステージ][アニメーション]
 int woodImage[SIZE_END];	// 板[大・小]
+int ocntImage;				// 正解数のイラスト
 
 void GameSysInit(void)
 {
@@ -48,12 +49,13 @@ void GameSysInit(void)
 	answerMusic = LoadSoundMem("music/answer.mp3");
 
 	// イラストの初期化
-	woodImage[0] = LoadGraph("image/問題.jpg");
-	woodImage[1] = LoadGraph("image/選択肢.jpg");
+	woodImage[0] = LoadGraph("image/問題.png");
+	woodImage[1] = LoadGraph("image/選択肢.png");
 	lifeImage = LoadGraph("image/life.jpg");
 	timeImage = LoadGraph("image/time.jpg");
-	toiImage = LoadGraph("image/問.jpg");
-	LoadDivGraph("image/1st_.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[0]);
+	toiImage = LoadGraph("image/問.png");
+	ocntImage = LoadGraph("image/正解数.png");
+	LoadDivGraph("image/1st.png", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[0]);
 	LoadDivGraph("image/2nd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[1]);
 	LoadDivGraph("image/3rd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[2]);
 
@@ -80,6 +82,9 @@ int GameMain(void)
 
 	cnt++;
 	DrawGraph(0, 0, backImage[stage][cnt / 5 % 2], true);
+	DrawBox(50, 0, 650, 50, 0x707070, true);
+	DrawBox(50, 0, (stage * 4 + oCnt) * 50 + 50, 50, 0xff0000, true);
+	DrawGraph(50, 0, ocntImage, true);
 	DrawGraph(615, 480, lifeImage, true);
 	DrawFormatStringToHandle(637, 528, 0x000000, gameFont, "%d", life);
 
@@ -152,7 +157,7 @@ void QuestionScene(void)
 	changeTime--;
 	if (changeTime <= 0)
 	{
-		time = 1200;
+		time = 900;
 		gamescene = GAME_A;
 		changeTime = RESULT_CHANGE;
 		do {
@@ -173,8 +178,8 @@ void QuestionScene(void)
 }
 void QuestionDraw(void)
 {
-	DrawGraph(50, 25, woodImage[BIG], true);
-	DrawFormatStringToHandle((700 - QWide) / 2, 83, 0xffffff, quizFont, "%s", Q);
+	DrawGraph(50, 70, woodImage[BIG], true);
+	DrawFormatStringToHandle((700 - QWide) / 2, 128, 0xffffff, quizFont, "%s", Q);
 }
 
 void AnswerScene(void)
@@ -288,9 +293,8 @@ int GameResult(void)
 		{
 			return -1;
 		}
-		if (oCnt == 1)
+		if (oCnt == 4)
 		{
-			oCnt = 0;
 			return 1;
 		}
 	}
@@ -330,6 +334,7 @@ void GameContnue(void)
 	{
 		if (!fadeinOld && fade == FADE_WHITE)
 		{
+			oCnt = 0;
 			stage++;
 			gamescene = GAME_S; 
 			changeTime = START_CHANGE;

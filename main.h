@@ -11,10 +11,6 @@
 #define START_POS_Y	325			// スタートの縦座標
 #define RULE_POS_Y	450			// 遊び方説明の縦座標
 #define BACK_POS_Y	475			// 戻る・次への縦座標
-#define A1_POS_Y	220			// 選択肢１の縦座標
-#define A2_POS_Y	345			// 選択肢２の縦座標
-#define A3_POS_Y	470			// 選択肢３の縦座標
-
 
 // シーン管理
 enum SCENE_ID

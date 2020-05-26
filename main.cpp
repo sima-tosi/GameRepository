@@ -89,7 +89,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					if (FadeOutB())
 					{
 						sceneID = SCENE_RESULT;
-						PlaySoundFile("music/result.mp3", DX_PLAYTYPE_BACK);
+						PlaySoundFile("music/resultX.mp3", DX_PLAYTYPE_BACK);
+						rank1 = Score1();
+						rank2 = Score2();
 					}
 				}
 				if (fade == FADE_WHITE)
@@ -97,7 +99,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					if(FadeOutW() && fadeWCnt == 3)
 					{
 						sceneID = SCENE_RESULT;
-						PlaySoundFile("music/result.mp3", DX_PLAYTYPE_BACK);
+						PlaySoundFile("music/resultO.mp3", DX_PLAYTYPE_BACK);
+						rank1 = Score1();
+						rank2 = Score2();
 						clear = true;
 					}
 				}
@@ -157,20 +161,18 @@ bool SystemInit(void)	// èâä˙ê›íË
 	SetDrawScreen(DX_SCREEN_BACK);
 	SRand(time(NULL));
 
-	SetTransColor(0, 0, 0);
-
 	// ÉCÉâÉXÉgèâä˙ê›íË
-	titleImage = LoadGraph("image/É^ÉCÉgÉã.jpg");
-	startWImage = LoadGraph("image/START.jpg");
-	ruleWImage = LoadGraph("image/óVÇ—ï˚ê‡ñæ.jpg");
-	backWImage = LoadGraph("image/ñﬂÇÈ.jpg");
-	nextWImage = LoadGraph("image/éüÇ÷.jpg");
+	titleImage = LoadGraph("image/title.png");
+	startWImage = LoadGraph("image/START.png");
+	ruleWImage = LoadGraph("image/óVÇ—ï˚ê‡ñæ.png");
+	backWImage = LoadGraph("image/ñﬂÇÈ.png");
+	nextWImage = LoadGraph("image/éüÇ÷.png");
 	LoadDivGraph("image/ê‡ñæ.png", 3, 2, 2, 700, 450, ruleImage);;
-	ayamaruImage = LoadGraph("image/ïVä€OP.jpg");
-	LoadDivGraph("image/GAME.jpg", 2, 1, 2, 500, 125, resultImage);
-	LoadDivGraph("image/ÉâÉìÉN.jpg", 5, 1, 5, 200, 64, rankImage1);
-	LoadDivGraph("image/îE.jpg", 3, 1, 3, 200, 64, rankImage2);
-	LoadDivGraph("image/EDïVä€.jpg", 2, 2, 1, 200, 225, EDImage);
+	ayamaruImage = LoadGraph("image/ïVä€OP.png");
+	LoadDivGraph("image/GAME.png", 2, 1, 2, 500, 125, resultImage);
+	LoadDivGraph("image/ÉâÉìÉN.png", 5, 1, 5, 200, 64, rankImage1);
+	LoadDivGraph("image/îE.png", 3, 1, 3, 200, 64, rankImage2);
+	LoadDivGraph("image/EDïVä€.png", 2, 2, 1, 200, 225, EDImage);
 
 	// ïœêîèâä˙ê›íË
 	sceneID = SCENE_INIT;
@@ -195,22 +197,25 @@ void SceneInit(void)	// èâä˙âª
 
 void TitleScene(void)
 {
-	if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
-		START_POS_Y < mouseY && START_POS_Y + WOOD_SMALL_Y > mouseY &&
-		mouseDown[MOUSE_LEFT])
+	if (!fadeOut)
 	{
-		fadeOut = true;
-		fadeIn = false;
-		fade = FADE_BLACK;
-	}
-	if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
-		RULE_POS_Y < mouseY && RULE_POS_Y + WOOD_SMALL_Y > mouseY &&
-		mouseDown[MOUSE_LEFT])
-	{
-		fadeOut = true;
-		fadeIn = false;
-		fade = FADE_WHITE;
-		rulePage = 0;
+		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+			START_POS_Y < mouseY && START_POS_Y + WOOD_SMALL_Y > mouseY &&
+			mouseDown[MOUSE_LEFT])
+		{
+			fadeOut = true;
+			fadeIn = false;
+			fade = FADE_BLACK;
+		}
+		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+			RULE_POS_Y < mouseY && RULE_POS_Y + WOOD_SMALL_Y > mouseY &&
+			mouseDown[MOUSE_LEFT])
+		{
+			fadeOut = true;
+			fadeIn = false;
+			fade = FADE_WHITE;
+			rulePage = 0;
+		}
 	}
 
 	TitleDraw();
@@ -250,8 +255,6 @@ void GameScene(void)
 
 void ResultScene(void)
 {
-	rank1 = Score1();
-	rank2 = Score2();
 	if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 		BACK_POS_Y < mouseY && BACK_POS_Y + WOOD_SMALL_Y > mouseY &&
 		mouseDown[MOUSE_LEFT])

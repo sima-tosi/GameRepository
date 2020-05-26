@@ -2,8 +2,12 @@
 
 #define START_CHANGE	180		// 背景のみの時間
 #define TITLE_CHANGE    150		// 「問題」を時間
-#define QUESTION_CHANGE	240		// 問題文を読む時間
+#define QUESTION_CHANGE	180		// 問題文を読む時間
 #define RESULT_CHANGE   120		// 正解発表時間
+
+#define A1_POS_Y	260			// 選択肢１の縦座標
+#define A2_POS_Y	370			// 選択肢２の縦座標
+#define A3_POS_Y	480			// 選択肢３の縦座標
 
 // ゲームのシーン管理
 enum GAME_SCENE {
