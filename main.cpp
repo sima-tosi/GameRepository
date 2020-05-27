@@ -171,7 +171,7 @@ bool SystemInit(void)	// ‰Šúİ’è
 	ayamaruImage = LoadGraph("image/•VŠÛOP.png");
 	LoadDivGraph("image/GAME.png", 2, 1, 2, 500, 125, resultImage);
 	LoadDivGraph("image/ƒ‰ƒ“ƒN.png", 5, 1, 5, 200, 64, rankImage1);
-	LoadDivGraph("image/”E.png", 3, 1, 3, 200, 64, rankImage2);
+	LoadDivGraph("image/”E1.png", 3, 1, 3, 200, 64, rankImage2);
 	LoadDivGraph("image/ED•VŠÛ.png", 2, 2, 1, 200, 225, EDImage);
 
 	// •Ï”‰Šúİ’è

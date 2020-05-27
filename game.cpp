@@ -49,8 +49,8 @@ void GameSysInit(void)
 	answerMusic = LoadSoundMem("music/answer.mp3");
 
 	// イラストの初期化
-	woodImage[0] = LoadGraph("image/問題.png");
-	woodImage[1] = LoadGraph("image/選択肢.png");
+	woodImage[0] = LoadGraph("image/問題文.png");
+	woodImage[1] = LoadGraph("image/選択.png");
 	lifeImage = LoadGraph("image/life.jpg");
 	timeImage = LoadGraph("image/time.jpg");
 	toiImage = LoadGraph("image/問.png");
@@ -186,24 +186,6 @@ void AnswerScene(void)
 {
 	AnswerDraw();
 
-	if (mouseDown[MOUSE_LEFT])
-	{
-		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
-			A1_POS_Y < mouseY && A1_POS_Y + WOOD_SMALL_Y > mouseY)
-		{
-			check[0] = true;
-		}
-		else if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
-			A2_POS_Y < mouseY && A2_POS_Y + WOOD_SMALL_Y > mouseY)
-		{
-			check[1] = true;
-		}
-		else if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
-			A3_POS_Y < mouseY && A3_POS_Y + WOOD_SMALL_Y > mouseY)
-		{
-			check[2] = true;
-		}
-	}
 	if (cutOk && !cutOkOld)
 	{
 		bool O = false;
@@ -237,6 +219,25 @@ void AnswerScene(void)
 				gamescene = GAME_R;
 				return;
 			}
+		}
+	}
+
+	if (mouseDown[MOUSE_LEFT])
+	{
+		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+			A1_POS_Y < mouseY && A1_POS_Y + WOOD_SMALL_Y > mouseY)
+		{
+			check[0] = true;
+		}
+		else if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+			A2_POS_Y < mouseY && A2_POS_Y + WOOD_SMALL_Y > mouseY)
+		{
+			check[1] = true;
+		}
+		else if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+			A3_POS_Y < mouseY && A3_POS_Y + WOOD_SMALL_Y > mouseY)
+		{
+			check[2] = true;
 		}
 	}
 
@@ -357,7 +358,7 @@ int Score2(void)
 	{
 		return 0;
 	}
-	else if(O >= 4)
+	else if(O >= 6)
 	{
 		return 1;
 	}
