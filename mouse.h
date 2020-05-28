@@ -14,8 +14,4 @@ void MousePos(int* x,int* y);
 bool MouseDraw(int x, int y);
 
 // ïœêî
-extern bool mouseOld[MOUSE_MAX];
-extern bool mouseNew[MOUSE_MAX];
 extern bool mouseDown[MOUSE_MAX];
-extern int cutMusic;
-

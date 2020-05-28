@@ -12,8 +12,7 @@ int cnt;			// 背景用カウント
 int oCnt;			// 正解数
 int stage;			// ステージ数
 int life;			// 残機
-int time;			// 制限時間
-int changeTime;		// シーンの変更をする時間
+int time;			// 時間
 int A[3];			// 選択番号
 int QWide;			// 問題文の幅
 int AWide[3];		// 答えの幅
@@ -55,8 +54,8 @@ void GameSysInit(void)
 	timeImage = LoadGraph("image/time.jpg");
 	toiImage = LoadGraph("image/問.png");
 	ocntImage = LoadGraph("image/正解数.png");
-	LoadDivGraph("image/1st.png", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[0]);
-	LoadDivGraph("image/2nd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[1]);
+	LoadDivGraph("image/1st_2.png", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[0]);
+	LoadDivGraph("image/2nd.png", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[1]);
 	LoadDivGraph("image/3rd.jpg", 2, 2, 1, SCREEN_SIZE_X, SCREEN_SIZE_Y, backImage[2]);
 
 	// 文字の設定
@@ -66,27 +65,22 @@ void GameSysInit(void)
 }
 void GameSceneInit(void)
 {
+	cnt = 0;
 	oCnt = 0;
-	time = 1200;
 	life = 3;
 	stage = 0;
 	fadeinOld = true;
 	cutOkOld = true;
 	gamescene = GAME_S;
-	changeTime = START_CHANGE;
+	time = START_TIME;
+	QuizSceneInit();
 }
 
 int GameMain(void)
 {
-	int c = 0;
+	int c = 0;	// フェードする？
 
-	cnt++;
-	DrawGraph(0, 0, backImage[stage][cnt / 5 % 2], true);
-	DrawBox(50, 0, 650, 50, 0x707070, true);
-	DrawBox(50, 0, (stage * 4 + oCnt) * 50 + 50, 50, 0xff0000, true);
-	DrawGraph(50, 0, ocntImage, true);
-	DrawGraph(615, 480, lifeImage, true);
-	DrawFormatStringToHandle(637, 528, 0x000000, gameFont, "%d", life);
+	GameMainDraw();
 
 	switch (gamescene)
 	{
@@ -112,29 +106,39 @@ int GameMain(void)
 		break;
 	}
 
-
 	fadeinOld = fadeIn;
 
 	return c;
 }
+void GameMainDraw(void)
+{
+	cnt++;
+	DrawGraph(0, 0, backImage[stage][cnt / 5 % 2], true);
+	DrawBox(50, 0, 650, 50, 0x707070, true);
+	DrawBox(50, 0, (stage * 4 + oCnt) * 50 + 50, 50, 0xff0000, true);
+	DrawGraph(50, 0, ocntImage, true);
+	DrawGraph(615, 480, lifeImage, true);
+	DrawFormatStringToHandle(637, 528, 0x000000, gameFont, "%d", life);
+}
 
 void GameStart(void)
 {
-	changeTime--;
-	if (changeTime <= 0)
+	time--;
+	if (time <= 0)
 	{
 		gamescene = GAME_T;
 		PlaySoundMem(quizMusic, DX_PLAYTYPE_BACK);
-		changeTime = TITLE_CHANGE;
+		time = TITLE_TIME;
 	}
 }
+
 void GameTitle(void)
 {
-	changeTime--;
-	if (changeTime <= 0)
+	time--;
+	if (time <= 0)
 	{
 		gamescene = GAME_Q;
-		changeTime = QUESTION_CHANGE;
+		time = QUESTION_TIME;
 		Q = QuizSend(stage);
 		quiz[0] = AnswerSend(stage);
 		quiz[1] = Wrong1Send(stage);
@@ -142,10 +146,12 @@ void GameTitle(void)
 		QWide = GetDrawFormatStringWidthToHandle(quizFont, Q);
 	}
 
+	GameTitleDrow();
+}
+void GameTitleDrow(void)
+{
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
-
-	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000,true);
-
+	DrawBox(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	DrawGraph(220, 233, toiImage, true);
@@ -154,12 +160,11 @@ void GameTitle(void)
 void QuestionScene(void)
 {
 	QuestionDraw();
-	changeTime--;
-	if (changeTime <= 0)
+	time--;
+	if (time <= 0)
 	{
-		time = 900;
+		time = ANSWER_TIME;
 		gamescene = GAME_A;
-		changeTime = RESULT_CHANGE;
 		do {
 			for (int a = 0; a < 3; a++)
 			{
@@ -207,6 +212,7 @@ void AnswerScene(void)
 			PlaySoundMem(xMusic, DX_PLAYTYPE_BACK);
 			life--;
 			gamescene = GAME_R;
+			time = RESULT_TIME;
 			return;
 		}
 		else if (okCut != okCnt)
@@ -217,6 +223,7 @@ void AnswerScene(void)
 			{
 				oCnt++;
 				gamescene = GAME_R;
+				time = RESULT_TIME;
 				return;
 			}
 		}
@@ -229,12 +236,12 @@ void AnswerScene(void)
 		{
 			check[0] = true;
 		}
-		else if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 			A2_POS_Y < mouseY && A2_POS_Y + WOOD_SMALL_Y > mouseY)
 		{
 			check[1] = true;
 		}
-		else if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
+		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 			A3_POS_Y < mouseY && A3_POS_Y + WOOD_SMALL_Y > mouseY)
 		{
 			check[2] = true;
@@ -254,6 +261,7 @@ void AnswerScene(void)
 		PlaySoundMem(xMusic, DX_PLAYTYPE_BACK);
 		life--;
 		gamescene = GAME_R;
+		time = RESULT_TIME;
 		return;
 	}
 
@@ -285,8 +293,8 @@ void AnswerDraw(void)
 
 int GameResult(void)
 {
-	changeTime--;
-	if (changeTime <= 0)
+	time--;
+	if (time <= 0)
 	{
 		gamescene = GAME_C;
 
@@ -338,7 +346,7 @@ void GameContnue(void)
 			oCnt = 0;
 			stage++;
 			gamescene = GAME_S; 
-			changeTime = START_CHANGE;
+			time = START_TIME;
 		}
 		return;
 	}
@@ -346,7 +354,7 @@ void GameContnue(void)
 	{
 		gamescene = GAME_T;
 		PlaySoundMem(quizMusic, DX_PLAYTYPE_BACK);
-		changeTime = TITLE_CHANGE;
+		time = TITLE_TIME;
 	}
 }
 

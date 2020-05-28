@@ -3,11 +3,9 @@
 #include "game.h"
 #include "mouse.h"
 #include "effect.h"
-#include "quiz.h"
 #include "time.h"
 
 SCENE_ID sceneID;
-SCENE_ID sceneIDOld;
 
 int mouseX;		// マウスＸ座標
 int mouseY;		// マウスＹ座標
@@ -41,7 +39,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ゲームループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		if (sceneID != sceneIDOld)sceneIDOld = sceneID;
 
 		MouseCheck();
 
@@ -159,7 +156,7 @@ bool SystemInit(void)	// 初期設定
 		return false;
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
-	SRand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	// イラスト初期設定
 	titleImage = LoadGraph("image/title.png");
@@ -176,7 +173,6 @@ bool SystemInit(void)	// 初期設定
 
 	// 変数初期設定
 	sceneID = SCENE_INIT;
-	sceneIDOld = SCENE_MAX;
 	mouseX = -1;
 	mouseY = -1;
 	MouseSysInit();
@@ -188,7 +184,6 @@ bool SystemInit(void)	// 初期設定
 void SceneInit(void)	// 初期化
 {
 	GameSceneInit();
-	QuizSceneInit();
 	fadeWCnt = 0;
 	clear = false;
 	sceneID = SCENE_TITLE;

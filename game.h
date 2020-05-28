@@ -1,9 +1,10 @@
 #pragma once
 
-#define START_CHANGE	180		// 背景のみの時間
-#define TITLE_CHANGE    150		// 「問題」を時間
-#define QUESTION_CHANGE	180		// 問題文を読む時間
-#define RESULT_CHANGE   120		// 正解発表時間
+#define START_TIME		180		// 背景のみの時間
+#define TITLE_TIME		150		// 「問題」を時間
+#define QUESTION_TIME	180		// 問題文を読む時間
+#define ANSWER_TIME		900		// 解答時間
+#define RESULT_TIME		120		// 正解発表時間
 
 #define A1_POS_Y	260			// 選択肢１の縦座標
 #define A2_POS_Y	370			// 選択肢２の縦座標
@@ -24,6 +25,8 @@ void GameSysInit(void);
 void GameSceneInit(void);
 void GameStart(void);
 void GameTitle(void);
+void GameTitleDrow(void);
+void GameMainDraw(void);
 int GameMain(void);
 void QuestionScene(void);
 void QuestionDraw(void);
