@@ -5,7 +5,7 @@
 #include "effect.h"
 #include "quiz.h"
 
-int gamescene;		
+int gamescene;		// ゲームシーン
 
 int okCnt;			// 切った枚数
 int cnt;			// 背景用カウント
@@ -39,6 +39,7 @@ int backImage[3][2];		// 背景[ステージ][アニメーション]
 int woodImage[SIZE_END];	// 板[大・小]
 int ocntImage;				// 正解数のイラスト
 
+// ゲーム初期設定
 void GameSysInit(void)
 {
 	// 音楽
@@ -63,6 +64,7 @@ void GameSysInit(void)
 	quizFont = CreateFontToHandle("QUIZ", 20, -1, -1);
 	answerFont = CreateFontToHandle("ANSWER", 38, -1, -1);
 }
+// ゲーム初期化
 void GameSceneInit(void)
 {
 	cnt = 0;
@@ -110,6 +112,7 @@ int GameMain(void)
 
 	return c;
 }
+// 背景
 void GameMainDraw(void)
 {
 	cnt++;
@@ -121,6 +124,7 @@ void GameMainDraw(void)
 	DrawFormatStringToHandle(637, 528, 0x000000, gameFont, "%d", life);
 }
 
+// 休憩シーン
 void GameStart(void)
 {
 	time--;
@@ -132,6 +136,7 @@ void GameStart(void)
 	}
 }
 
+// 準備シーン
 void GameTitle(void)
 {
 	time--;
@@ -148,6 +153,7 @@ void GameTitle(void)
 
 	GameTitleDrow();
 }
+// 準備描画
 void GameTitleDrow(void)
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -157,6 +163,7 @@ void GameTitleDrow(void)
 	DrawGraph(220, 233, toiImage, true);
 }
 
+// 問題シーン 
 void QuestionScene(void)
 {
 	QuestionDraw();
@@ -165,12 +172,15 @@ void QuestionScene(void)
 	{
 		time = ANSWER_TIME;
 		gamescene = GAME_A;
+
+		// 正解の場所を決める
 		do {
 			for (int a = 0; a < 3; a++)
 			{
 				A[a] = rand() % 3;
 			}
 		} while (A[0] == A[1] || A[1] == A[2] || A[2] == A[0]);
+
 		for (int a = 0; a < 3; a++)
 		{
 			check[a] = false;
@@ -178,19 +188,23 @@ void QuestionScene(void)
 			AWide[a] = GetDrawFormatStringWidthToHandle(answerFont, quiz[a]);
 		}
 		okCnt = 0;
+
 		PlaySoundMem(answerMusic, DX_PLAYTYPE_BACK);
 	}
 }
+// 問題描画
 void QuestionDraw(void)
 {
 	DrawGraph(50, 70, woodImage[BIG], true);
 	DrawFormatStringToHandle((700 - QWide) / 2, 128, 0xffffff, quizFont, "%s", Q);
 }
 
+// 解答シーン 
 void AnswerScene(void)
 {
 	AnswerDraw();
 
+	// 正誤判定
 	if (cutOk && !cutOkOld)
 	{
 		bool O = false;
@@ -229,6 +243,7 @@ void AnswerScene(void)
 		}
 	}
 
+	// 解答選択
 	if (mouseDown[MOUSE_LEFT])
 	{
 		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
@@ -249,6 +264,7 @@ void AnswerScene(void)
 	}
 
 	time--;
+	// 時間切れ
 	if (time <= 0)
 	{
 		for (int a = 0; a < 3; a++)
@@ -267,6 +283,7 @@ void AnswerScene(void)
 
 	cutOkOld = cutOk;
 }
+// 解答描画
 void AnswerDraw(void)
 {
 	QuestionDraw();
@@ -291,6 +308,7 @@ void AnswerDraw(void)
 	}
 }
 
+// 結果シーン 
 int GameResult(void)
 {
 	time--;
@@ -312,6 +330,7 @@ int GameResult(void)
 
 	return 0;
 }
+// 結果描画
 void GameResultDraw(void)
 {
 	QuestionDraw();
@@ -333,6 +352,7 @@ void GameResultDraw(void)
 	}
 }
 
+// ステージアップ 
 void GameContnue(void)
 {
 	if (fadeOut)

@@ -12,28 +12,29 @@
 
 // ゲームのシーン管理
 enum GAME_SCENE {
-	GAME_S,
-	GAME_T,
-	GAME_Q,
-	GAME_A,
-	GAME_R,
-	GAME_C,
+	GAME_S,	// 休憩
+	GAME_T,	// 準備
+	GAME_Q,	// 問題
+	GAME_A,	// 解答
+	GAME_R,	// 結果
+	GAME_C,	// 続行
 	GAME_MAX
 };
 
-void GameSysInit(void);
-void GameSceneInit(void);
-void GameStart(void);
-void GameTitle(void);
-void GameTitleDrow(void);
-void GameMainDraw(void);
-int GameMain(void);
-void QuestionScene(void);
-void QuestionDraw(void);
-void AnswerScene(void);
-void AnswerDraw(void);
-int GameResult(void);
-void GameResultDraw(void);
-int Score1(void);
-int Score2(void);
-void GameContnue(void);
+// プロトタイプ宣言
+void GameSysInit(void);		// ゲームの初期設定
+void GameSceneInit(void);	// ゲームの初期化
+int GameMain(void);			// ゲーム循環
+void GameMainDraw(void);	// 背景描画
+void GameStart(void);		// 休憩シーン
+void GameTitle(void);		// 準備シーン
+void GameTitleDrow(void);	// 準備描画
+void QuestionScene(void);	// 問題シーン
+void QuestionDraw(void);	// 問題描画
+void AnswerScene(void);		// 解答シーン
+void AnswerDraw(void);		// 解答描画
+int GameResult(void);		// 結果シーン
+void GameResultDraw(void);	// 結果描画
+void GameContnue(void);		// ステージアップ
+int Score1(void);			// ランク
+int Score2(void);			// 忍

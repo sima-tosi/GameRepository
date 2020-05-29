@@ -6,6 +6,7 @@ int quizjyun[Qcnt];		// クイズの順番（バブルで使う）
 int quizNo[Qcnt];		// クイズ番号
 int quizsuu;			// 今の問題数
 
+// クイズ初期化
 void QuizSceneInit(void)
 {
 	quizsuu = -1;
@@ -35,6 +36,7 @@ void QuizSceneInit(void)
 	
 }
 
+// 問題文を送る
 char* QuizSend(int level)
 {
 	quizsuu++;
@@ -48,6 +50,7 @@ char* QuizSend(int level)
 		return hard[quizNo[quizsuu]][0];
 	}
 }
+// 正解を送る
 char* AnswerSend(int level)
 {
 	switch (level)
@@ -60,6 +63,7 @@ char* AnswerSend(int level)
 		return hard[quizNo[quizsuu]][1];
 	}
 }
+// １つ目の間違いを送る
 char* Wrong1Send(int level)
 {
 	switch (level)
@@ -72,6 +76,7 @@ char* Wrong1Send(int level)
 		return hard[quizNo[quizsuu]][2];
 	}
 }
+// ２つ目の間違いを送る
 char* Wrong2Send(int level)
 {
 	switch (level)

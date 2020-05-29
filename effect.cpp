@@ -7,6 +7,7 @@ int fade;		// フェードの色
 bool fadeIn;	// フェードインしてる？
 bool fadeOut;	// フェードアウトしてる？
 
+// フェード初期設定
 void FadeSysInit(void)
 {
 	fadeCnt = 0;
@@ -14,6 +15,8 @@ void FadeSysInit(void)
 	fadeIn = false;
 	fadeOut = false;
 }
+
+// フェードイン
 bool FadeIn(void)
 {
 	fadeCnt -= 4;
@@ -27,6 +30,7 @@ bool FadeIn(void)
 	return false;
 }
 
+// 黒フェードアウト
 bool FadeOutB(void)
 {
 	fadeCnt += 4;
@@ -40,6 +44,7 @@ bool FadeOutB(void)
 	}
 	return false;
 }
+// 白フェードアウト
 bool FadeOutW(void)
 {
 	fadeCnt += 4;
@@ -53,6 +58,7 @@ bool FadeOutW(void)
 	return false;
 }
 
+// フェードの描画
 void FadeDraw(void)
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, fadeCnt);

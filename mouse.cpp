@@ -8,6 +8,7 @@ bool mouseOld[MOUSE_MAX];	// 昔
 bool mouseNew[MOUSE_MAX];	// 今
 bool mouseDown[MOUSE_MAX];	// 押された？
 
+// マウスの初期化
 void MouseSysInit(void)
 {
 	for (int mouseID = 0; mouseID <  MOUSE_MAX; mouseID++)
@@ -21,6 +22,7 @@ void MouseSysInit(void)
 	cutMusic = LoadSoundMem("music/click.mp3");
 }
 
+// クリック状況
 void MouseCheck(void)
 {
 	for (int mouseID = 0; mouseID < MOUSE_MAX; mouseID++)
@@ -43,6 +45,7 @@ void MouseCheck(void)
 	}
 }
 
+// マウス座標
 void MousePos(int* x,int* y)
 {
 	GetMousePoint(x, y);
@@ -50,6 +53,7 @@ void MousePos(int* x,int* y)
 	PlaySoundMem(cutMusic, DX_PLAYTYPE_BACK);
 }
 
+// 斬撃描画
 bool MouseDraw(int x,int y)
 {
 	if (x > 0 || y > 0)

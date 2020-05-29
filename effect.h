@@ -3,17 +3,18 @@
 // フェードの色
 enum FADE_COLER
 {
-	FADE_NULL,
-	FADE_WHITE,
-	FADE_BLACK,
+	FADE_NULL,	// フェードなし
+	FADE_WHITE,	// フェード白
+	FADE_BLACK,	// フェード黒
 	FADE_MAX
 };
 
-void FadeSysInit(void);
-bool FadeIn(void);
-bool FadeOutB(void);
-bool FadeOutW(void);
-void FadeDraw(void);
+// プロトタイプ宣言
+void FadeSysInit(void);	// フェード初期化
+bool FadeIn(void);		// フェードイン
+bool FadeOutB(void);	// フェードアウト黒
+bool FadeOutW(void);	// フェードアウト白
+void FadeDraw(void);	// フェード描画
 
 extern int fade;		// フェードの色
 extern bool fadeIn;		// フェードインしてる？

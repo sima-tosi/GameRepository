@@ -5,7 +5,7 @@
 #include "effect.h"
 #include "time.h"
 
-SCENE_ID sceneID;
+SCENE_ID sceneID;	// シーン管理
 
 int mouseX;		// マウスＸ座標
 int mouseY;		// マウスＹ座標
@@ -14,7 +14,7 @@ int rank1;		// ～ランク
 int rank2;		// ～忍
 int rulePage;	// 遊び方説明のページ数
 bool clear;		// ゲームクリア？
-bool cutOk;		// 切ってもいいか
+bool cutOk;		// 切ってもいい？
 
 int titleImage;		// タイトル
 int startWImage;	// スタートの板
@@ -32,17 +32,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	if (!SystemInit())
 	{
-
 		return 0;
 	}
 
 	// ゲームループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-
 		MouseCheck();
 
-		ClsDrawScreen();					// 画面消去
+		ClsDrawScreen();	// 画面消去
 
 		if (fadeIn)FadeIn();
 
@@ -65,7 +63,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					{
 						sceneID = SCENE_GAME;
 						PlaySoundFile("music/game.mp3", DX_PLAYTYPE_LOOP);
-
 					}
 				}
 				if (fade == FADE_WHITE)
@@ -145,7 +142,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return 0;								//プログラムの終了
 }
 
-bool SystemInit(void)	// 初期設定
+// 初期設定
+bool SystemInit(void)
 {
 	// システム処理
 	SetWindowText("彪丸");
@@ -164,8 +162,8 @@ bool SystemInit(void)	// 初期設定
 	ruleWImage = LoadGraph("image/遊び方説明.png");
 	backWImage = LoadGraph("image/戻る.png");
 	nextWImage = LoadGraph("image/次へ.png");
-	LoadDivGraph("image/説明.png", 3, 2, 2, 700, 450, ruleImage);;
 	ayamaruImage = LoadGraph("image/彪丸OP.png");
+	LoadDivGraph("image/説明.png", 3, 2, 2, 700, 450, ruleImage);
 	LoadDivGraph("image/GAME.png", 2, 1, 2, 500, 125, resultImage);
 	LoadDivGraph("image/ランク.png", 5, 1, 5, 200, 64, rankImage1);
 	LoadDivGraph("image/忍1.png", 3, 1, 3, 200, 64, rankImage2);
@@ -181,7 +179,8 @@ bool SystemInit(void)	// 初期設定
 
 	return true;
 }
-void SceneInit(void)	// 初期化
+// 初期化
+void SceneInit(void)
 {
 	GameSceneInit();
 	fadeWCnt = 0;
@@ -190,10 +189,12 @@ void SceneInit(void)	// 初期化
 	PlaySoundFile("music/title.mp3", DX_PLAYTYPE_LOOP);
 }
 
+// タイトルシーン 
 void TitleScene(void)
 {
 	if (!fadeOut)
 	{
+		// 開始
 		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 			START_POS_Y < mouseY && START_POS_Y + WOOD_SMALL_Y > mouseY &&
 			mouseDown[MOUSE_LEFT])
@@ -202,6 +203,7 @@ void TitleScene(void)
 			fadeIn = false;
 			fade = FADE_BLACK;
 		}
+		// 遊び方説明
 		if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 			RULE_POS_Y < mouseY && RULE_POS_Y + WOOD_SMALL_Y > mouseY &&
 			mouseDown[MOUSE_LEFT])
@@ -215,8 +217,10 @@ void TitleScene(void)
 
 	TitleDraw();
 }
+// タイトル描画
 void TitleDraw(void)
 {
+	// 背景
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 80);
 	DrawGraph(0, 0, ayamaruImage, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -226,6 +230,7 @@ void TitleDraw(void)
 	DrawGraph(SMALL_POS_X, RULE_POS_Y, ruleWImage, true);
 }
 
+// ゲームシーン
 void GameScene(void)
 {
 	int c;
@@ -248,6 +253,7 @@ void GameScene(void)
 	}
 }
 
+// リザルトシーン
 void ResultScene(void)
 {
 	if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
@@ -258,13 +264,9 @@ void ResultScene(void)
 		fadeIn = false;
 		fade = FADE_BLACK;
 	}
-	if (mouseDown[MOUSE_RIGHT])
-	{
-		fadeOut = true;
-		fade = FADE_WHITE;
-	}
 	ResultDraw();
 }
+// リザルト描画
 void ResultDraw(void)
 {
 	DrawGraph(100, 25, resultImage[clear], true);
@@ -274,14 +276,17 @@ void ResultDraw(void)
 	DrawGraph(SMALL_POS_X, BACK_POS_Y, backWImage, true);
 }
 
+// ルールシーン 
 void RuleScene(void)
 {
+	// ページをめくる
 	if (SMALL_POS_X < mouseX && SMALL_POS_X + WOOD_SMALL_X > mouseX &&
 		BACK_POS_Y < mouseY && BACK_POS_Y + WOOD_SMALL_Y > mouseY &&
 		mouseDown[MOUSE_LEFT] && cutOk)
 	{
 		rulePage++;
 	}
+	// タイトルに戻る
 	if (rulePage == 3 && mouseDown[MOUSE_LEFT])
 	{
 		fadeOut = true;
@@ -291,6 +296,7 @@ void RuleScene(void)
 
 	RuleDraw();
 }
+// ルール描画
 void RuleDraw(void)
 {
 	if (rulePage < 3)

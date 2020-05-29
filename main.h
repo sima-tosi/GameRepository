@@ -19,27 +19,26 @@ enum SCENE_ID
 	SCENE_TITLE,	// タイトル
 	SCENE_GAME,		// プレイ中
 	SCENE_RESULT,	// リザルト
-	SCENE_RULE,
+	SCENE_RULE,		// ルール
 	SCENE_MAX		
 };
 // 木のサイズ
 enum SIZE_WOOD {
-	BIG,
-	SMALL,
+	BIG,			// 大きい
+	SMALL,			// 小さい
 	SIZE_END
 };
 
 // プロトタイプ宣言
-
-bool SystemInit(void);
-void SceneInit(void);
-void TitleScene(void);
-void TitleDraw(void);
-void GameScene(void);
-void ResultScene(void);
-void ResultDraw(void);
-void RuleScene(void);
-void RuleDraw(void);
+bool SystemInit(void);	// 初期設定
+void SceneInit(void);	// 初期化
+void TitleScene(void);	// タイトルシーン
+void TitleDraw(void);	// タイトル描画
+void GameScene(void);	// ゲームシーン
+void ResultScene(void);	// リザルトシーン
+void ResultDraw(void);	// リザルト描画
+void RuleScene(void);	// ルールシーン
+void RuleDraw(void);	// ルール描画
 
 extern int mouseX;			// マウスＸ座標
 extern int mouseY;			// マウスＹ座標
